@@ -1,0 +1,2382 @@
+{
+  "info": {
+    "_postman_id": "34aed722-fb65-4e79-8236-953f97a357d3",
+    "name": "MyDenta",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "45080250",
+    "_collection_link": "https://go.postman.co/collection/45080250-34aed722-fb65-4e79-8236-953f97a357d3?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "AUTH",
+      "item": [
+        {
+          "name": "Авторизация",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Проверяем, что ответ успешный\r",
+                  "if (pm.response.code === 200) {\r",
+                  "    // Парсим JSON ответ\r",
+                  "    const responseData = pm.response.json();\r",
+                  "    \r",
+                  "    // Проверяем наличие токена в ответе\r",
+                  "    if (responseData.response && responseData.response.token) {\r",
+                  "        // Сохраняем токен в переменную коллекции\r",
+                  "        pm.collectionVariables.set(\"token\", responseData.response.token);\r",
+                  "        \r",
+                  "        // Выводим сообщение в консоль для отладки\r",
+                  "        console.log(\"Токен сохранен:\", responseData.response.token);\r",
+                  "        \r",
+                  "        // Показываем уведомление в Postman\r",
+                  "        pm.test(\"Токен успешно сохранен\", function() {\r",
+                  "            pm.expect(responseData.response.token).to.be.a('string');\r",
+                  "            pm.expect(responseData.response.token.length).to.be.greaterThan(0);\r",
+                  "        });\r",
+                  "    } else {\r",
+                  "        console.error(\"Токен не найден в ответе\");\r",
+                  "        pm.test(\"Токен не найден в ответе\", function() {\r",
+                  "            pm.expect.fail(\"Токен не найден в ответе\");\r",
+                  "        });\r",
+                  "    }\r",
+                  "} else {\r",
+                  "    console.error(\"Ошибка при получении токена:\", pm.response.code);\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "{{password}}",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "{{username}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://{{host}}/fmi/data/v1/databases/{{nameBase}}/sessions",
+              "protocol": "http",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "fmi",
+                "data",
+                "v1",
+                "databases",
+                "{{nameBase}}",
+                "sessions"
+              ]
+            },
+            "description": "# 🔐 АВТОРИЗАЦИЯ\n\n**URL:** `POST {{base_url}}/sessions`  \n**Для чего:** Получить токен для доступа к API\n\n## 📤 ЧТО ОТПРАВЛЯЕМ\n\n**Заголовки:**\n\n```\nAuthorization: Basic QXBpX1Rlc3Q6QXBpVGVzdA==\nContent-Type: application/json\n\n ```\n\n**Тело запроса (ОБЯЗАТЕЛЬНО!):**\n\n```\n{}\n\n ```\n\n**Что такое Basic код?**  \n`Api_Test:ApiTest` → base64 → `QXBpX1Rlc3Q6QXBpVGVzdA==`\n\n## 📥 ЧТО ПОЛУЧАЕМ\n\n**Успех (200 OK):**\n\n```\n{\n    \"response\": {\n        \"token\": \"1e93d52dad97eaf6deef16e387d36c03686\"\n    },\n    \"messages\": [{\"code\": \"0\", \"message\": \"OK\"}]\n}\n\n ```"
+          },
+          "response": [
+            {
+              "name": "Успешная авторизация",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/sessions",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "sessions"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "116"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"74-/Flki2JkTULOFmjvbFaCiIlQClI\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-FM-Data-Access-Token",
+                  "value": "24cdc5e2ea53cce9c88cea7df918da2a0316d1e550c0fcdd3c"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 19:23:47 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"response\": {\n        \"token\": \"24cdc5e2ea53cce9c88cea7df918da2a0316d1e550c0fcdd3c\"\n    },\n    \"messages\": [\n        {\n            \"code\": \"0\",\n            \"message\": \"OK\"\n        }\n    ]\n}"
+            },
+            {
+              "name": "Пустое тело запроса",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/sessions",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "sessions"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 19:31:25 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"messages\": [\n        {\n            \"message\": \"Invalid content type (application/octet-stream).  These are valid: application/json\",\n            \"code\": \"1708\"\n        }\n    ],\n    \"response\": {}\n}"
+            },
+            {
+              "name": "Неверные данные авторизации",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/sessions",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "sessions"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "88"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"58-xcZJPa5APwU9kfhxwsDK89DJPPk\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 19:33:10 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"messages\": [\n        {\n            \"code\": \"212\",\n            \"message\": \"Invalid user account or password\"\n        }\n    ],\n    \"response\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Деавторизация",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Проверяем успешный статус\r",
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "// Проверяем структуру ответа\r",
+                  "pm.test(\"Response has correct structure\", function () {\r",
+                  "    const responseData = pm.response.json();\r",
+                  "    pm.expect(responseData).to.have.property('messages');\r",
+                  "    \r",
+                  "    // Проверяем код успешного выполнения\r",
+                  "    if (responseData.messages && responseData.messages.length > 0) {\r",
+                  "        pm.expect(responseData.messages[0].code).to.equal(\"0\");\r",
+                  "        pm.expect(responseData.messages[0].message).to.equal(\"OK\");\r",
+                  "    }\r",
+                  "});\r",
+                  "\r",
+                  "// Получаем данные ответа\r",
+                  "const responseData = pm.response.json();\r",
+                  "\r",
+                  "// Проверяем, что деавторизация прошла успешно\r",
+                  "if (responseData.messages && \r",
+                  "    responseData.messages.length > 0 && \r",
+                  "    responseData.messages[0].code === \"0\" && \r",
+                  "    responseData.messages[0].message === \"OK\") {\r",
+                  "    \r",
+                  "    // Сохраняем старый токен для логов\r",
+                  "    const oldToken = pm.collectionVariables.get(\"token\");\r",
+                  "    \r",
+                  "    // Делаем переменную ПУСТОЙ (не удаляем!)\r",
+                  "    pm.collectionVariables.set(\"token\", \"\");\r",
+                  "    \r",
+                  "    console.log(\"✅ Деавторизация успешна\");\r",
+                  "    console.log(\"🧹 Токен очищен (переменная осталась, но пустая)\");\r",
+                  "    \r",
+                  "    if (oldToken) {\r",
+                  "        console.log(\"Старый токен был:\", oldToken.substring(0, 15) + \"...\");\r",
+                  "    }\r",
+                  "    \r",
+                  "    // Проверяем, что переменная существует, но пустая\r",
+                  "    pm.test(\"Token variable is cleared but exists\", function () {\r",
+                  "        pm.expect(pm.collectionVariables.get(\"token\")).to.equal(\"\");\r",
+                  "        pm.expect(pm.collectionVariables.has(\"token\")).to.be.true;\r",
+                  "    });\r",
+                  "    \r",
+                  "} else {\r",
+                  "    console.error(\"❌ Деавторизация не удалась\");\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/sessions/{{token}}",
+              "protocol": "https",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "fmi",
+                "data",
+                "v1",
+                "databases",
+                "{{nameBase}}",
+                "sessions",
+                "{{token}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Нет корректного токена",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/sessions/{{token}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "sessions",
+                    "{{token}}"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "92"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"5c-mpkaFXIhDrAh10KWhW1dcS8hh8c\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 19:49:09 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"messages\": [\n        {\n            \"code\": \"952\",\n            \"message\": \"Invalid FileMaker Data API token (*)\"\n        }\n    ],\n    \"response\": {}\n}"
+            },
+            {
+              "name": "Успешная деавторизация",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/sessions/{{token}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "sessions",
+                    "{{token}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "56"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"38-Da03ciR66+XAys+OaM29kKe8clo\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 19:49:30 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"response\": {},\n    \"messages\": [\n        {\n            \"code\": \"0\",\n            \"message\": \"OK\"\n        }\n    ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "schedule",
+      "item": [
+        {
+          "name": "Поиск свободных слотов",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/find_free_time?script.param={{date_start}}|{{date_end}}|{{doctor_id}}",
+              "protocol": "https",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "fmi",
+                "data",
+                "v1",
+                "databases",
+                "{{nameBase}}",
+                "layouts",
+                "time_free",
+                "script",
+                "find_free_time"
+              ],
+              "query": [
+                {
+                  "key": "script.param",
+                  "value": "{{date_start}}|{{date_end}}|{{doctor_id}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Нет авторизации",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/find_free_time?script.param={{date_start}}|{{date_end}}|{{doctor_id}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "layouts",
+                    "time_free",
+                    "script",
+                    "find_free_time"
+                  ],
+                  "query": [
+                    {
+                      "key": "script.param",
+                      "value": "{{date_start}}|{{date_end}}|{{doctor_id}}"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "92"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"5c-mpkaFXIhDrAh10KWhW1dcS8hh8c\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 19:41:41 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"messages\": [\n        {\n            \"code\": \"952\",\n            \"message\": \"Invalid FileMaker Data API token (*)\"\n        }\n    ],\n    \"response\": {}\n}"
+            },
+            {
+              "name": "Успешный поиск по всем врачам",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/find_free_time?script.param={{date_start}}|{{date_end}}|{{doctor_id}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "layouts",
+                    "time_free",
+                    "script",
+                    "find_free_time"
+                  ],
+                  "query": [
+                    {
+                      "key": "script.param",
+                      "value": "{{date_start}}|{{date_end}}|{{doctor_id}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "562"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"232-9/g4uoVknQiZvM6p4Zm7Y6+tu78\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 19:43:26 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"response\": {\n        \"scriptResult\": \"05.02.2026;158;16:45:00;17:00:00\\r05.02.2026;157;11:00:00;12:30:00\\r05.02.2026;176;15:30:00;18:00:00\\r05.02.2026;176;19:30:00;21:00:00\\r06.02.2026;168;9:00:00;13:30:00\\r06.02.2026;157;14:00:00;16:00:00\\r06.02.2026;162;16:15:00;18:00:00\\r06.02.2026;162;19:15:00;21:00:00\\r06.02.2026;182;15:30:00;16:00:00\\r06.02.2026;182;19:30:00;21:00:00\\r05.02.2026;173;9:00:00;11:00:00\\r05.02.2026;173;13:00:00;14:30:00\\r06.02.2026;189;9:00:00;11:00:00\\r05.02.2026;183;15:30:00;20:00:00\",\n        \"scriptError\": \"0\"\n    },\n    \"messages\": [\n        {\n            \"code\": \"0\",\n            \"message\": \"OK\"\n        }\n    ]\n}"
+            },
+            {
+              "name": "Успешный поиск по конкретному врачу",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/find_free_time?script.param={{date_start}}|{{date_end}}|{{doctor_id}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "layouts",
+                    "time_free",
+                    "script",
+                    "find_free_time"
+                  ],
+                  "query": [
+                    {
+                      "key": "script.param",
+                      "value": "{{date_start}}|{{date_end}}|{{doctor_id}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "123"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"7b-fn9kByNfCOxmJFHgC9Hj/fyFZMo\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 19:47:17 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"response\": {\n        \"scriptResult\": \"05.02.2026;158;16:45:00;17:00:00\",\n        \"scriptError\": \"0\"\n    },\n    \"messages\": [\n        {\n            \"code\": \"0\",\n            \"message\": \"OK\"\n        }\n    ]\n}"
+            },
+            {
+              "name": "Нет данных",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/find_free_time?script.param={{date_start}}|{{date_end}}|{{doctor_id}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "layouts",
+                    "time_free",
+                    "script",
+                    "find_free_time"
+                  ],
+                  "query": [
+                    {
+                      "key": "script.param",
+                      "value": "{{date_start}}|{{date_end}}|{{doctor_id}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "96"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"60-QDNgmHTllWPBUF1p0QPjZ4hmCSc\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 19:48:44 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"response\": {\n        \"scriptResult\": \"200\",\n        \"scriptError\": \"401\"\n    },\n    \"messages\": [\n        {\n            \"code\": \"0\",\n            \"message\": \"OK\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Запись пациента",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/create_record_shedule_api?script.param={{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}",
+              "protocol": "https",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "fmi",
+                "data",
+                "v1",
+                "databases",
+                "{{nameBase}}",
+                "layouts",
+                "time_free",
+                "script",
+                "create_record_shedule_api"
+              ],
+              "query": [
+                {
+                  "key": "script.param",
+                  "value": "{{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}"
+                }
+              ]
+            },
+            "description": "Важно отметить для этого метода. Он может записывать слоты поверх других слотов"
+          },
+          "response": [
+            {
+              "name": "Успешная запись пациента",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/create_record_shedule_api?script.param={{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "layouts",
+                    "time_free",
+                    "script",
+                    "create_record_shedule_api"
+                  ],
+                  "query": [
+                    {
+                      "key": "script.param",
+                      "value": "{{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "103"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"67-WjlfZAZyB5QWZCR4jX//GNQ3sbQ\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 21:53:24 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"response\": {\n        \"scriptResult\": \"record: 4916\",\n        \"scriptError\": \"0\"\n    },\n    \"messages\": [\n        {\n            \"code\": \"0\",\n            \"message\": \"OK\"\n        }\n    ]\n}"
+            },
+            {
+              "name": "Нет авторизации",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/create_record_shedule_api?script.param={{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "layouts",
+                    "time_free",
+                    "script",
+                    "create_record_shedule_api"
+                  ],
+                  "query": [
+                    {
+                      "key": "script.param",
+                      "value": "{{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 21:55:12 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"messages\": [\n        {\n            \"message\": \"Request validation failed: Parameter (Authorization) is required\",\n            \"code\": \"10\"\n        }\n    ],\n    \"response\": {}\n}"
+            },
+            {
+              "name": "Попытка записи на несуществующий слот",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/create_record_shedule_api?script.param={{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "layouts",
+                    "time_free",
+                    "script",
+                    "create_record_shedule_api"
+                  ],
+                  "query": [
+                    {
+                      "key": "script.param",
+                      "value": "{{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"5e-rKpKBAYDarVvhzuQLUnyjLYeBE0\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 21:56:56 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"response\": {\n        \"scriptResult\": \"100\",\n        \"scriptError\": \"0\"\n    },\n    \"messages\": [\n        {\n            \"code\": \"0\",\n            \"message\": \"OK\"\n        }\n    ]\n}"
+            },
+            {
+              "name": "Попытка записи к несуществующему доктору",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/create_record_shedule_api?script.param={{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "layouts",
+                    "time_free",
+                    "script",
+                    "create_record_shedule_api"
+                  ],
+                  "query": [
+                    {
+                      "key": "script.param",
+                      "value": "{{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "96"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"60-679lLwGqVMtlr3yKCfw6yNs9/bU\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 21:58:04 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"response\": {\n        \"scriptResult\": \"300\",\n        \"scriptError\": \"401\"\n    },\n    \"messages\": [\n        {\n            \"code\": \"0\",\n            \"message\": \"OK\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Перезапись пациента",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/create_record_shedule_api?script.param={{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}",
+              "protocol": "https",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "fmi",
+                "data",
+                "v1",
+                "databases",
+                "{{nameBase}}",
+                "layouts",
+                "time_free",
+                "script",
+                "create_record_shedule_api"
+              ],
+              "query": [
+                {
+                  "key": "script.param",
+                  "value": "{{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}"
+                }
+              ]
+            },
+            "description": "Важно отметить для этого метода, возвращает новый id записи после перезаписи"
+          },
+          "response": [
+            {
+              "name": "Нет авторизации",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/create_record_shedule_api?script.param={{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}|{{record_id}}|{{comment}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "layouts",
+                    "time_free",
+                    "script",
+                    "create_record_shedule_api"
+                  ],
+                  "query": [
+                    {
+                      "key": "script.param",
+                      "value": "{{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}|{{record_id}}|{{comment}}"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 22:04:11 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"messages\": [\n        {\n            \"message\": \"Request validation failed: Parameter (Authorization) is required\",\n            \"code\": \"10\"\n        }\n    ],\n    \"response\": {}\n}"
+            },
+            {
+              "name": "Попытка переноса на несуществующий слот",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/create_record_shedule_api?script.param={{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}|{{record_id}}|{{comment}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "layouts",
+                    "time_free",
+                    "script",
+                    "create_record_shedule_api"
+                  ],
+                  "query": [
+                    {
+                      "key": "script.param",
+                      "value": "{{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}|{{record_id}}|{{comment}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"5e-rKpKBAYDarVvhzuQLUnyjLYeBE0\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 22:04:49 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"response\": {\n        \"scriptResult\": \"100\",\n        \"scriptError\": \"0\"\n    },\n    \"messages\": [\n        {\n            \"code\": \"0\",\n            \"message\": \"OK\"\n        }\n    ]\n}"
+            },
+            {
+              "name": "Попытка перезаписи к несуществующему доктору",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/create_record_shedule_api?script.param={{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}|{{record_id}}|{{comment}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "layouts",
+                    "time_free",
+                    "script",
+                    "create_record_shedule_api"
+                  ],
+                  "query": [
+                    {
+                      "key": "script.param",
+                      "value": "{{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}|{{record_id}}|{{comment}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "96"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"60-679lLwGqVMtlr3yKCfw6yNs9/bU\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 22:05:25 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"response\": {\n        \"scriptResult\": \"300\",\n        \"scriptError\": \"401\"\n    },\n    \"messages\": [\n        {\n            \"code\": \"0\",\n            \"message\": \"OK\"\n        }\n    ]\n}"
+            },
+            {
+              "name": "Успешная перезапись",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/create_record_shedule_api?script.param={{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}|{{record_id}}|{{comment}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "layouts",
+                    "time_free",
+                    "script",
+                    "create_record_shedule_api"
+                  ],
+                  "query": [
+                    {
+                      "key": "script.param",
+                      "value": "{{patient_phone_local}}|{{patient_phone_code}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}|{{appointment_start}}|{{appointment_end}}|{{doctor_id}}|{{record_id}}|{{comment}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "103"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"67-uAmJJYsiL4TUIh/zn69OV9FEXek\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 22:06:35 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"response\": {\n        \"scriptResult\": \"record: 4918\",\n        \"scriptError\": \"0\"\n    },\n    \"messages\": [\n        {\n            \"code\": \"0\",\n            \"message\": \"OK\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Поиск Существующей записи",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/find_record_shedule?script.param={{patient_phone_code}}75447587826||||",
+              "protocol": "https",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "fmi",
+                "data",
+                "v1",
+                "databases",
+                "{{nameBase}}",
+                "layouts",
+                "time_free",
+                "script",
+                "find_record_shedule"
+              ],
+              "query": [
+                {
+                  "key": "script.param",
+                  "value": "{{patient_phone_code}}75447587826||||"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Успешный поиск",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/find_record_shedule?script.param={{patient_phone_code}}{{patient_phone_local}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "layouts",
+                    "time_free",
+                    "script",
+                    "find_record_shedule"
+                  ],
+                  "query": [
+                    {
+                      "key": "script.param",
+                      "value": "{{patient_phone_code}}{{patient_phone_local}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "211"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"d3-i+qlsIH0Lzn7c+5qJmb6tde1qBc\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 22:16:34 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"response\": {\n        \"scriptResult\": \"4916;18.03.2026;158;14:00:00;14:30:00;\\r4917;18.03.2026;158;14:00:00;14:30:00;\\r4918;18.03.2026;158;14:30:00;15:00:00;\",\n        \"scriptError\": \"101\"\n    },\n    \"messages\": [\n        {\n            \"code\": \"0\",\n            \"message\": \"OK\"\n        }\n    ]\n}"
+            },
+            {
+              "name": "Нет авторизации",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/find_record_shedule?script.param={{patient_phone_code}}{{patient_phone_local}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "layouts",
+                    "time_free",
+                    "script",
+                    "find_record_shedule"
+                  ],
+                  "query": [
+                    {
+                      "key": "script.param",
+                      "value": "{{patient_phone_code}}{{patient_phone_local}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 22:17:43 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"messages\": [\n        {\n            \"message\": \"Request validation failed: Parameter (Authorization) is required\",\n            \"code\": \"10\"\n        }\n    ],\n    \"response\": {}\n}"
+            },
+            {
+              "name": "Нет записей на дату",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/find_record_shedule?script.param={{patient_phone_code}}{{patient_phone_local}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "layouts",
+                    "time_free",
+                    "script",
+                    "find_record_shedule"
+                  ],
+                  "query": [
+                    {
+                      "key": "script.param",
+                      "value": "{{patient_phone_code}}{{patient_phone_local}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "96"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"60-KEoE0+LfLF5PwViK5Q52YlCyk+o\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 22:18:42 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"response\": {\n        \"scriptResult\": \"600\",\n        \"scriptError\": \"401\"\n    },\n    \"messages\": [\n        {\n            \"code\": \"0\",\n            \"message\": \"OK\"\n        }\n    ]\n}"
+            },
+            {
+              "name": "Поиск без даты",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "https://{{host}}/fmi/data/v1/databases/{{nameBase}}/layouts/time_free/script/find_record_shedule?script.param={{patient_phone_code}}{{patient_phone_local}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}",
+                  "protocol": "https",
+                  "host": [
+                    "{{host}}"
+                  ],
+                  "path": [
+                    "fmi",
+                    "data",
+                    "v1",
+                    "databases",
+                    "{{nameBase}}",
+                    "layouts",
+                    "time_free",
+                    "script",
+                    "find_record_shedule"
+                  ],
+                  "query": [
+                    {
+                      "key": "script.param",
+                      "value": "{{patient_phone_code}}{{patient_phone_local}}|{{patient_last_name}}|{{patient_first_name}}|{{patient_middle_name}}|{{appointment_date}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "211"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"d3-i+qlsIH0Lzn7c+5qJmb6tde1qBc\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "X-Powered-By",
+                  "value": "ARR/3.0"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "1; mode=block"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "SRV1_VIZU"
+                },
+                {
+                  "key": "Access-Control-Allow-Headers",
+                  "value": "Content-Type, Authorization"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 26 Jan 2026 22:19:31 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"response\": {\n        \"scriptResult\": \"4916;18.03.2026;158;14:00:00;14:30:00;\\r4917;18.03.2026;158;14:00:00;14:30:00;\\r4918;18.03.2026;158;14:30:00;15:00:00;\",\n        \"scriptError\": \"101\"\n    },\n    \"messages\": [\n        {\n            \"code\": \"0\",\n            \"message\": \"OK\"\n        }\n    ]\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "nameBase",
+      "value": "",
+      "description": "Имя базы к которой мы обращаемся"
+    },
+    {
+      "key": "host",
+      "value": "",
+      "description": "ip-адрес сервера на котором стоит система"
+    },
+    {
+      "key": "username",
+      "value": "",
+      "description": "Для basic auth"
+    },
+    {
+      "key": "password",
+      "value": "",
+      "description": "Для basic auth"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "description": "Токен для bearer auth (сбрасывается через 15 минут без запросов)"
+    },
+    {
+      "key": "date_start",
+      "value": "",
+      "description": "Дата начала поиска свободных дат (dd.mm.yyyy)"
+    },
+    {
+      "key": "date_end",
+      "value": "",
+      "description": "Дата конца поиска свободных дат (dd.mm.yyyy)"
+    },
+    {
+      "key": "doctor_id",
+      "value": "",
+      "description": "id доктора (можно заменить пробелом)"
+    },
+    {
+      "key": "patient_phone_local",
+      "value": "",
+      "description": "телефон (формат ХХХХХХХ) телефон БЕЗ кода страны, и без + "
+    },
+    {
+      "key": "patient_phone_code",
+      "value": "",
+      "description": "телефон (формат ХХХХХХХ) телефон БЕЗ кода страны, и без + "
+    },
+    {
+      "key": "patient_last_name",
+      "value": "",
+      "description": "Фамилия"
+    },
+    {
+      "key": "patient_first_name",
+      "value": "",
+      "description": "Имя"
+    },
+    {
+      "key": "patient_middle_name",
+      "value": "",
+      "description": "Отчество"
+    },
+    {
+      "key": "appointment_date",
+      "value": "",
+      "description": "Дата записи/перезаписи"
+    },
+    {
+      "key": "appointment_start",
+      "value": "",
+      "description": "Время начала записи/перезаписи"
+    },
+    {
+      "key": "appointment_end",
+      "value": "",
+      "description": "Время конца записи/перезаписи"
+    },
+    {
+      "key": "record_id",
+      "value": "",
+      "description": "id записи на стороне МИС"
+    },
+    {
+      "key": "comment",
+      "value": "",
+      "description": "Комментарий переноса записи"
+    }
+  ]
+}

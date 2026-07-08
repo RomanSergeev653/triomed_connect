@@ -1,0 +1,20 @@
+services:
+  app:
+    build: .
+    container_name: triomed-connect
+    env_file: .env
+    restart: unless-stopped
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.triomed.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.triomed.entrypoints=websecure
+      - traefik.http.routers.triomed.tls=true
+      - traefik.http.routers.triomed.tls.certresolver=${TRAEFIK_CERT_RESOLVER}
+      - traefik.http.services.triomed.loadbalancer.server.port=8000
+
+networks:
+  traefik:
+    external: true
+    name: ${TRAEFIK_NETWORK}
