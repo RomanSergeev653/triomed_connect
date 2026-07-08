@@ -9,7 +9,30 @@ from app.token_cache import token_cache
 class MyDentaClient:
     def __init__(self, credentials: ConnectionCredentials) -> None:
         self.credentials = credentials
-        self.base_url = f"http://{credentials.host.strip('/')}/fmi/data/v1/databases/{credentials.database}"
+        host = credentials.host.strip("/")
+        self.base_url = f"https://{host}/fmi/data/v1/databases/{credentials.database}"
+
+    def _client(self) -> httpx.AsyncClient:
+        return httpx.AsyncClient(
+            timeout=settings.mydenta_request_timeout,
+            verify=settings.mydenta_verify_ssl,
+            http2=False,
+        )
+
+    async def _send(self, method: str, url: str, **kwargs) -> httpx.Response:
+        try:
+            async with self._client() as client:
+                return await client.request(method, url, **kwargs)
+        except httpx.TimeoutException as exc:
+            raise HTTPException(
+                status_code=504,
+                detail={"message": "MyDenta request timed out", "error": str(exc)},
+            ) from exc
+        except httpx.RequestError as exc:
+            raise HTTPException(
+                status_code=502,
+                detail={"message": "MyDenta connection failed", "error": str(exc)},
+            ) from exc
 
     async def _get_token(self, *, force_refresh: bool = False) -> str:
         creds = self.credentials
@@ -18,12 +41,12 @@ class MyDentaClient:
             if cached:
                 return cached
 
-        async with httpx.AsyncClient(timeout=settings.mydenta_request_timeout) as client:
-            response = await client.post(
-                f"{self.base_url}/sessions",
-                json={},
-                auth=(creds.username, creds.password),
-            )
+        response = await self._send(
+            "POST",
+            f"{self.base_url}/sessions",
+            json={},
+            auth=(creds.username, creds.password),
+        )
 
         if response.status_code != 200:
             raise HTTPException(
@@ -57,13 +80,12 @@ class MyDentaClient:
         token = await self._get_token()
         headers = {"Authorization": f"Bearer {token}"}
 
-        async with httpx.AsyncClient(timeout=settings.mydenta_request_timeout) as client:
-            response = await client.request(
-                method,
-                f"{self.base_url}{path}",
-                headers=headers,
-                params=params,
-            )
+        response = await self._send(
+            method,
+            f"{self.base_url}{path}",
+            headers=headers,
+            params=params,
+        )
 
         if response.status_code == 401 and retry_on_unauthorized:
             await token_cache.invalidate(
@@ -73,13 +95,12 @@ class MyDentaClient:
             )
             token = await self._get_token(force_refresh=True)
             headers = {"Authorization": f"Bearer {token}"}
-            async with httpx.AsyncClient(timeout=settings.mydenta_request_timeout) as client:
-                response = await client.request(
-                    method,
-                    f"{self.base_url}{path}",
-                    headers=headers,
-                    params=params,
-                )
+            response = await self._send(
+                method,
+                f"{self.base_url}{path}",
+                headers=headers,
+                params=params,
+            )
 
         if response.status_code >= 400:
             raise HTTPException(
@@ -108,10 +129,10 @@ class MyDentaClient:
 
     async def logout(self, token: str | None = None) -> dict:
         session_token = token or await self._get_token()
-        async with httpx.AsyncClient(timeout=settings.mydenta_request_timeout) as client:
-            response = await client.delete(
-                f"{self.base_url}/sessions/{session_token}",
-            )
+        response = await self._send(
+            "DELETE",
+            f"{self.base_url}/sessions/{session_token}",
+        )
 
         await token_cache.invalidate(
             self.credentials.host,

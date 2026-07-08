@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 
 
 class ConnectionCredentials(BaseModel):
-    host: str = Field(..., description="Адрес сервера MyDenta, например 192.168.1.10:8080")
+    host: str = Field(..., description="Адрес сервера MyDenta (HTTPS), например 178.124.210.218:443")
     database: str = Field(..., description="Название базы FileMaker")
     username: str
     password: str
