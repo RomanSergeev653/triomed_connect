@@ -12,6 +12,7 @@ amoCRM  ──HTTPS──►  Triomed Connect  ──HTTPS (-k)──►  MyDent
 ## Возможности
 
 - REST API с JSON-телом для amoCRM
+- CORS для виджетов с доменов `*.amocrm.ru` / `*.kommo.com` (иначе браузер блокирует preflight)
 - Авторизация в MyDenta и кэш сессии (~14 мин)
 - Поиск свободных слотов, записей пациента, создание и перезапись
 - Деплой через Docker + Traefik (или standalone nginx + Let's Encrypt)

@@ -9,5 +9,12 @@ class Settings(BaseSettings):
     mydenta_request_timeout: float = 30.0
     mydenta_verify_ssl: bool = False  # MyDenta uses self-signed / invalid cert (curl -k)
 
+    # CORS for amoCRM / Kommo widgets (browser → Connect)
+    cors_allow_origins: list[str] = [
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+    ]
+    cors_allow_origin_regex: str = r"https://.*\.(amocrm\.(ru|com)|kommo\.com)"
+
 
 settings = Settings()
