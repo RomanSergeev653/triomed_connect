@@ -1,11 +1,47 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
+
+# Домены прослойки — нельзя подставлять в host (иначе Connect бьёт сам в себя → 404)
+_FORBIDDEN_MYDENTA_HOSTNAMES = frozenset(
+    {
+        "mydenta.limbrs.top",
+        "localhost",
+        "127.0.0.1",
+        "0.0.0.0",
+    }
+)
 
 
 class ConnectionCredentials(BaseModel):
-    host: str = Field(..., description="Адрес сервера MyDenta (HTTPS), например 178.124.210.218:443")
+    host: str = Field(
+        ...,
+        description=(
+            "Адрес сервера MyDenta (IP:порт), например 178.124.210.218:443. "
+            "Не указывайте домен Triomed Connect (mydenta.limbrs.top)."
+        ),
+    )
     database: str = Field(..., description="Название базы FileMaker")
     username: str
     password: str
+
+    @field_validator("host")
+    @classmethod
+    def normalize_mydenta_host(cls, value: str) -> str:
+        host = value.strip().removeprefix("https://").removeprefix("http://")
+        host = host.split("/")[0].split("?")[0].rstrip("/")
+        if not host:
+            raise ValueError("host пустой")
+
+        hostname = host.split(":")[0].lower()
+        if (
+            hostname in _FORBIDDEN_MYDENTA_HOSTNAMES
+            or hostname.endswith(".limbrs.top")
+        ):
+            raise ValueError(
+                "host должен быть адресом MyDenta (например 178.124.210.218:443), "
+                "а не доменом Triomed Connect (mydenta.limbrs.top). "
+                "Домен прослойки — только в URL запроса, не в поле host."
+            )
+        return host
 
 
 class FreeSlotsRequest(ConnectionCredentials):
@@ -26,6 +62,25 @@ class FreeSlot(BaseModel):
 
 class FreeSlotsResponse(BaseModel):
     slots: list[FreeSlot]
+    script_error: str
+    raw: str | None = None
+
+
+class DoctorsRequest(ConnectionCredentials):
+    date_start: str = Field(..., description="Дата начала, формат дд.мм.гггг")
+    date_end: str = Field(..., description="Дата окончания, формат дд.мм.гггг")
+
+
+class Doctor(BaseModel):
+    doctor_id: str
+    full_name: str
+    post_name: str
+
+
+class DoctorsResponse(BaseModel):
+    doctors: list[Doctor]
+    status: str | None = None
+    message: str | None = None
     script_error: str
     raw: str | None = None
 

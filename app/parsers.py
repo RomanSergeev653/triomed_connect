@@ -1,4 +1,6 @@
-from app.schemas import Appointment, FreeSlot
+import json
+
+from app.schemas import Appointment, Doctor, FreeSlot
 
 
 def _split_lines(value: str) -> list[str]:
@@ -42,3 +44,42 @@ def parse_appointments(script_result: str) -> list[Appointment]:
             )
         )
     return appointments
+
+
+def parse_doctors(script_result: str) -> tuple[list[Doctor], str | None, str | None]:
+    """Parse get_list_doc JSON scriptResult → (doctors, status, message)."""
+    if not script_result or not script_result.strip():
+        return [], None, None
+
+    try:
+        payload = json.loads(script_result)
+    except json.JSONDecodeError:
+        return [], None, None
+
+    if not isinstance(payload, dict):
+        return [], None, None
+
+    doctors: list[Doctor] = []
+    for item in payload.get("list_doc") or []:
+        if not isinstance(item, dict):
+            continue
+        doctor_id = item.get("id_doc")
+        full_name = item.get("FullName")
+        post_name = item.get("post_name")
+        if doctor_id is None or full_name is None:
+            continue
+        doctors.append(
+            Doctor(
+                doctor_id=str(doctor_id),
+                full_name=str(full_name),
+                post_name=str(post_name) if post_name is not None else "",
+            )
+        )
+
+    status = payload.get("status")
+    message = payload.get("message")
+    return (
+        doctors,
+        str(status) if status is not None else None,
+        str(message) if message is not None else None,
+    )

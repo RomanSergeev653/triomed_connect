@@ -14,7 +14,7 @@ amoCRM  ──HTTPS──►  Triomed Connect  ──HTTPS (-k)──►  MyDent
 - REST API с JSON-телом для amoCRM
 - CORS для виджетов с доменов `*.amocrm.ru` / `*.kommo.com` (иначе браузер блокирует preflight)
 - Авторизация в MyDenta и кэш сессии (~14 мин)
-- Поиск свободных слотов, записей пациента, создание и перезапись
+- Поиск врачей, свободных слотов, записей пациента, создание и перезапись
 - Деплой через Docker + Traefik (или standalone nginx + Let's Encrypt)
 
 ## Быстрый старт (локально)
@@ -45,6 +45,7 @@ uvicorn app.main:app --reload --port 8000
 | Метод | Путь | Назначение |
 |-------|------|------------|
 | GET | `/health` | Проверка работы |
+| POST | `/api/v1/doctors` | Список врачей на период |
 | POST | `/api/v1/free-slots` | Свободные слоты |
 | POST | `/api/v1/appointments/search` | Записи пациента |
 | POST | `/api/v1/appointments` | Новая запись |
@@ -52,6 +53,21 @@ uvicorn app.main:app --reload --port 8000
 | POST | `/api/v1/sessions/logout` | Закрыть сессию MyDenta (опционально) |
 
 ### Примеры
+
+**Список врачей**
+
+```bash
+curl -s -X POST https://mydenta.limbrs.top/api/v1/doctors \
+  -H "Content-Type: application/json" \
+  -d '{
+    "host": "178.124.210.218:443",
+    "database": "My_Dent",
+    "username": "Api_Test",
+    "password": "ApiTest",
+    "date_start": "23.09.2026",
+    "date_end": "28.09.2026"
+  }'
+```
 
 **Свободные слоты**
 
@@ -207,6 +223,7 @@ HTTP-ответы прослойки:
 
 В базе должны быть опубликованы скрипты на layout `time_free`:
 
+- `get_list_doc`
 - `find_free_time`
 - `find_record_shedule`
 - `create_record_shedule_api`
