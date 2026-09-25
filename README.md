@@ -6,7 +6,7 @@ amoCRM не может ходить на MyDenta напрямую: у серве
 
 ```
 amoCRM  ──HTTPS──►  Triomed Connect  ──HTTPS (-k)──►  MyDenta
-                       mydenta.limbrs.top              host:443
+                       https://ВАШ_ДОМЕН              host:443
 ```
 
 ## Возможности
@@ -32,7 +32,7 @@ uvicorn app.main:app --reload --port 8000
 
 ## API
 
-Базовый URL (прод): `https://mydenta.limbrs.top`
+Базовый URL задаётся доменом в `.env` (`DOMAIN`) и тем же адресом в настройках виджета (`api_url`).
 
 Во всех рабочих запросах передаются учётные данные MyDenta:
 
@@ -138,41 +138,12 @@ amoCRM **не управляет** логином/логаутом. Просло
 
 ## Деплой
 
-### Вариант A — Traefik (рекомендуется)
+Пошагово на новый VPS: [docs/DEPLOY.md](docs/DEPLOY.md).
 
-Если на VPS уже есть Traefik (n8n и др.), используйте:
+- свободные 80/443 → `./scripts/init-letsencrypt.sh`
+- уже есть Traefik → `docker compose -f docker-compose.traefik.yml up -d --build`
 
-```bash
-cp .env.example .env
-# DOMAIN=mydenta.limbrs.top
-# TRAEFIK_NETWORK=...
-# TRAEFIK_CERT_RESOLVER=...
-
-./scripts/discover-traefik.sh n8n-compose-file-traefik-1   # подскажет значения
-docker compose -f docker-compose.traefik.yml up -d --build
-```
-
-Подробно: [docs/DEPLOY.md](docs/DEPLOY.md).
-
-### Вариант B — standalone (nginx + certbot)
-
-Только если порты 80/443 свободны:
-
-```bash
-cp .env.example .env
-# DOMAIN=...
-# CERTBOT_EMAIL=...
-
-./scripts/init-letsencrypt.sh
-```
-
-### Обновление
-
-```bash
-cd ~/workprojects/triomed_connect
-git pull
-docker compose -f docker-compose.traefik.yml up -d --build
-```
+В виджете amoCRM тот же адрес пишется в **URL коннектора**.
 
 ## Структура проекта
 
